@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <!-- Outer Green Ring Border -->
+  <circle cx="100" cy="100" r="96" fill="#ffffff" stroke="#006a4e" stroke-width="4.5" />
+  <circle cx="100" cy="100" r="92" fill="none" stroke="#006a4e" stroke-width="1.5" />
+  
+  <!-- Inner Red Disc -->
+  <circle cx="100" cy="100" r="64" fill="#f42a41" />
+  
+  <!-- Bangladesh Map Silhouette (Gold) in Red Disc -->
+  <g transform="translate(62, 46) scale(0.65)" fill="#ffc72c">
+    <path d="M52 12 C 58 10, 68 18, 70 24 C 72 30, 80 34, 82 42 C 84 50, 78 56, 75 62 C 72 68, 76 74, 80 80 C 84 86, 92 90, 88 100 C 85 106, 78 112, 70 114 C 64 116, 56 122, 50 118 C 45 114, 48 105, 42 100 C 36 95, 28 92, 24 85 C 20 78, 22 70, 26 65 C 30 60, 28 52, 32 46 C 36 40, 34 32, 38 25 C 42 18, 46 14, 52 12 Z M 60 30 C 58 35, 62 42, 60 48 C 58 54, 52 58, 54 65 C 56 72, 65 75, 62 82 C 60 88, 52 92, 55 98 C 58 102, 66 100, 70 95 C 75 90, 72 80, 74 72 C 76 65, 78 55, 72 48 C 68 42, 64 36, 60 30 Z" />
+  </g>
+
+  <!-- Circular Bengali Text -->
+  <defs>
+    <!-- Top Arc Path for গণপ্রজাতন্ত্রী বাংলাদেশ -->
+    <path id="top-arc" d="M 24,100 A 76,76 0 0,1 176,100" fill="none" />
+    <!-- Bottom Arc Path for সরকার -->
+    <path id="bottom-arc" d="M 166,110 A 76,76 0 0,1 34,110" fill="none" />
+  </defs>
+
+  <text fill="#006a4e" font-size="16.5" font-weight="900" font-family="'Noto Sans Bengali', 'SolaimanLipi', 'Kalpurush', sans-serif" letter-spacing="1">
+    <textPath href="#top-arc" startOffset="50%" text-anchor="middle">
+      গণপ্রজাতন্ত্রী বাংলাদেশ
+    </textPath>
+  </text>
+
+  <text fill="#006a4e" font-size="17" font-weight="900" font-family="'Noto Sans Bengali', 'SolaimanLipi', 'Kalpurush', sans-serif" letter-spacing="3">
+    <textPath href="#bottom-arc" startOffset="50%" text-anchor="middle">
+      সরকার
+    </textPath>
+  </text>
+
+  <!-- 4 Red Stars (2 left, 2 right) -->
+  <!-- Left Stars -->
+  <g transform="translate(18, 118) scale(0.65)" fill="#f42a41">
+    <polygon points="10,1 12,7 18,7 13,11 15,17 10,13 5,17 7,11 2,7 8,7" />
+  </g>
+  <g transform="translate(32, 142) scale(0.65)" fill="#f42a41">
+    <polygon points="10,1 12,7 18,7 13,11 15,17 10,13 5,17 7,11 2,7 8,7" />
+  </g>
+
+  <!-- Right Stars -->
+  <g transform="translate(168, 118) scale(0.65)" fill="#f42a41">
+    <polygon points="10,1 12,7 18,7 13,11 15,17 10,13 5,17 7,11 2,7 8,7" />
+  </g>
+  <g transform="translate(154, 142) scale(0.65)" fill="#f42a41">
+    <polygon points="10,1 12,7 18,7 13,11 15,17 10,13 5,17 7,11 2,7 8,7" />
+  </g>
+</svg>

@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  --primary-emerald: #047857;
+  --primary-dark: #064e3b;
+  --accent-gold: #f59e0b;
+}
+
+/* Custom scrollbar for modern chat interface */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+/* Glassmorphism utility */
+.glass-dark {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Smooth Sequential Notice Arrival (Right to Left Scrolling: One ends, next arrives) */
+@keyframes noticeScrollAcross {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-notice-across {
+  display: inline-flex;
+  align-items: center;
+  min-width: 100%;
+  animation: noticeScrollAcross 30s linear forwards;
+}
+
+.animate-notice-across:hover {
+  animation-play-state: paused;
+}
+
+/* Smooth transitions */
+* {
+  box-sizing: border-box;
+}
