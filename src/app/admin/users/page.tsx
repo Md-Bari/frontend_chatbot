@@ -12,13 +12,28 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
-  ChevronsRight
+  ChevronsRight,
+  UserPlus,
+  X,
+  Lock,
+  Mail,
+  User as UserIcon,
+  KeyRound,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchFilter, setSearchFilter] = useState('');
+
+  // Create User Modal State
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newRole, setNewRole] = useState<'citizen' | 'admin'>('citizen');
+  const [createSuccess, setCreateSuccess] = useState<string | null>(null);
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +43,16 @@ export default function AdminUsersPage() {
     setIsLoading(true);
     try {
       const data = await adminApi.getUsers();
-      setUsers(data || []);
+      // Merge with any locally stored users created by admin
+      const localUsersStr = localStorage.getItem('system_created_users');
+      let localUsers: User[] = [];
+      if (localUsersStr) {
+        try { localUsers = JSON.parse(localUsersStr); } catch {}
+      }
+      const combined = [...(data || []), ...localUsers];
+      // Deduplicate by username
+      const uniqueUsers = combined.filter((v, i, a) => a.findIndex(t => t.username === v.username) === i);
+      setUsers(uniqueUsers);
     } catch (err) {
       console.error('Failed to load users', err);
     } finally {
@@ -39,6 +63,41 @@ export default function AdminUsersPage() {
   useEffect(() => {
     loadUsers();
   }, []);
+
+  const handleCreateUser = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newUsername || !newPassword) return;
+
+    const newUser: User = {
+      id: Date.now(),
+      name: newName.trim() || newUsername.trim(),
+      username: newUsername.trim(),
+      email: newUsername.includes('@') ? newUsername.trim() : `${newUsername.trim()}@citizen.bd`,
+      role: newRole,
+      created_at: new Date().toISOString(),
+    };
+
+    const localUsersStr = localStorage.getItem('system_created_users');
+    let localUsers: User[] = [];
+    if (localUsersStr) {
+      try { localUsers = JSON.parse(localUsersStr); } catch {}
+    }
+    localUsers.unshift(newUser);
+    localStorage.setItem('system_created_users', JSON.stringify(localUsers));
+
+    setUsers(prev => [newUser, ...prev]);
+    setCreateSuccess(`ইউজার "${newUser.username}" সফলভাবে তৈরি হয়েছে! পাসওয়ার্ড: ${newPassword}`);
+    
+    // Clear inputs
+    setNewName('');
+    setNewUsername('');
+    setNewPassword('');
+
+    setTimeout(() => {
+      setCreateSuccess(null);
+      setIsCreateModalOpen(false);
+    }, 2000);
+  };
 
   // Filter users based on search
   const filteredUsers = users.filter(
@@ -89,17 +148,27 @@ export default function AdminUsersPage() {
               <span>Registered User Accounts</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1">
-              List of citizens and administrators with authentication records.
+              সিস্টেমের সকল নাগরিক এবং অ্যাডমিনিস্ট্রেটর অ্যাকাউন্ট তালিকা। কেবলমাত্র অ্যাডমিন নতুন ইউজার যোগ করতে পারেন।
             </p>
           </div>
 
-          <button
-            onClick={loadUsers}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold border border-slate-300 shadow-xs transition-colors"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-            <span>Refresh Roster</span>
-          </button>
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="flex items-center gap-1.5 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow-sm transition-all active:scale-95"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span>+ নতুন ইউজার তৈরি করুন</span>
+            </button>
+
+            <button
+              onClick={loadUsers}
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold border border-slate-300 shadow-xs transition-colors"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+              <span>Refresh Roster</span>
+            </button>
+          </div>
         </div>
 
         {/* Search & Page Size Filter Bar */}
@@ -288,6 +357,111 @@ export default function AdminUsersPage() {
           )}
         </div>
       </div>
+
+      {/* Create User Modal */}
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl overflow-hidden">
+            <button
+              onClick={() => setIsCreateModalOpen(false)}
+              className="absolute top-5 right-5 p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                <UserPlus className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">নতুন ইউজার তৈরি ও ক্রেডেনশিয়াল প্রদান</h3>
+                <p className="text-xs text-slate-500">অ্যাডমিন কর্তৃক নাগরিক বা কর্মকর্তার জন্য লগইন তথ্য প্রস্তুত করুন</p>
+              </div>
+            </div>
+
+            {createSuccess && (
+              <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <span>{createSuccess}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleCreateUser} className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">ব্যবহারকারীর পূর্ণ নাম</label>
+                <div className="relative">
+                  <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    placeholder="যেমন: মোঃ শরিফুল ইসলাম"
+                    className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">ইউজারনেম বা ইমেইল *</label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="text"
+                    required
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    placeholder="যেমন: citizen1 বা user@mail.com"
+                    className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">পাসওয়ার্ড *</label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="text"
+                    required
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="যেমন: citizen123"
+                    className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">অ্যাকাউন্টের ভূমিকা (Role)</label>
+                <select
+                  value={newRole}
+                  onChange={(e) => setNewRole(e.target.value as 'citizen' | 'admin')}
+                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:border-emerald-600 font-medium"
+                >
+                  <option value="citizen">👤 সাধারণ নাগরিক (Citizen / User)</option>
+                  <option value="admin">👑 সিস্টেম অ্যাডমিনিস্ট্রেটর (Admin)</option>
+                </select>
+              </div>
+
+              <div className="pt-2 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCreateModalOpen(false)}
+                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors"
+                >
+                  বাতিল
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow-md transition-all active:scale-95"
+                >
+                  ইউজার সংরক্ষণ করুন
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }

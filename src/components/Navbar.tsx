@@ -23,9 +23,9 @@ export default function Navbar({ onOpenChat }: { onOpenChat?: () => void }) {
 
   // Auth modal states
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authModalMode, setAuthModalMode] = useState<'login' | 'signup'>('login');
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'forgot'>('login');
 
-  const openAuth = (mode: 'login' | 'signup') => {
+  const openAuth = (mode: 'login' | 'forgot' = 'login') => {
     setAuthModalMode(mode);
     setAuthModalOpen(true);
   };
@@ -79,14 +79,6 @@ export default function Navbar({ onOpenChat }: { onOpenChat?: () => void }) {
 
           {/* Action icons & User Session */}
           <div className="hidden md:flex items-center space-x-3">
-            <button
-              onClick={onOpenChat}
-              className="flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-sm transition-all hover:shadow-md active:scale-95"
-            >
-              <span className="w-2 h-2 rounded-full bg-green-300 animate-ping"></span>
-              স্মার্ট এআই চ্যাটবট
-            </button>
-
             {user ? (
               <div className="relative">
                 <button
@@ -122,17 +114,10 @@ export default function Navbar({ onOpenChat }: { onOpenChat?: () => void }) {
               <div className="flex items-center space-x-1.5">
                 <button
                   onClick={() => openAuth('login')}
-                  className="text-xs text-emerald-800 font-bold hover:text-emerald-950 px-2.5 py-1.5 rounded-lg hover:bg-emerald-50 flex items-center gap-1 transition-colors"
+                  className="text-xs bg-emerald-50 text-emerald-800 font-bold hover:bg-emerald-100 px-3.5 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5 transition-colors shadow-2xs"
                 >
-                  <UserIcon className="w-3.5 h-3.5" />
-                  নাগরিক লগইন
-                </button>
-                <button
-                  onClick={() => openAuth('signup')}
-                  className="text-xs bg-emerald-50 text-emerald-800 font-bold hover:bg-emerald-100 px-2.5 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1 transition-colors"
-                >
-                  <UserPlus className="w-3.5 h-3.5" />
-                  নিবন্ধন
+                  <UserIcon className="w-3.5 h-3.5 text-emerald-700" />
+                  নাগরিক ও অ্যাডমিন লগইন
                 </button>
               </div>
             )}
@@ -153,14 +138,14 @@ export default function Navbar({ onOpenChat }: { onOpenChat?: () => void }) {
         <nav className="bg-emerald-700 text-white shadow-inner hidden md:block">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-xs font-medium">
             <div className="flex items-center space-x-1 py-1">
-              <Link href="/" className="px-3 py-1.5 rounded-sm bg-emerald-800/80 hover:bg-emerald-900 transition-colors">
+              <Link href="#" className="px-3 py-1.5 rounded-sm bg-emerald-800/80 hover:bg-emerald-900 transition-colors">
                 হোম (Home)
               </Link>
+              <a href="#features" className="px-3 py-1.5 rounded-sm hover:bg-emerald-800 transition-colors">
+                বৈশিষ্ট্য ও প্রযুক্তি
+              </a>
               <a href="#services" className="px-3 py-1.5 rounded-sm hover:bg-emerald-800 transition-colors">
                 নাগরিক সেবাসমূহ
-              </a>
-              <a href="#faqs" className="px-3 py-1.5 rounded-sm hover:bg-emerald-800 transition-colors">
-                জিজ্ঞাসা ও উত্তর (FAQ)
               </a>
               <a href="#notices" className="px-3 py-1.5 rounded-sm hover:bg-emerald-800 transition-colors">
                 নোটিশ ও প্রজ্ঞাপন
@@ -186,31 +171,20 @@ export default function Navbar({ onOpenChat }: { onOpenChat?: () => void }) {
         {mobileMenuOpen && (
           <div className="md:hidden bg-emerald-800 text-white px-4 py-3 space-y-2 border-t border-emerald-700">
             <Link href="/" className="block py-1.5 hover:text-emerald-200">হোম</Link>
+            <a href="#features" className="block py-1.5 hover:text-emerald-200" onClick={() => setMobileMenuOpen(false)}>বৈশিষ্ট্য ও প্রযুক্তি</a>
             <a href="#services" className="block py-1.5 hover:text-emerald-200" onClick={() => setMobileMenuOpen(false)}>নাগরিক সেবাসমূহ</a>
-            <a href="#faqs" className="block py-1.5 hover:text-emerald-200" onClick={() => setMobileMenuOpen(false)}>জিজ্ঞাসা ও উত্তর (FAQ)</a>
             <a href="#notices" className="block py-1.5 hover:text-emerald-200" onClick={() => setMobileMenuOpen(false)}>নোটিশ ও প্রজ্ঞাপন</a>
             <div className="pt-2 border-t border-emerald-700 space-y-2">
               {!user ? (
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      openAuth('login');
-                    }}
-                    className="flex-1 bg-white text-emerald-800 font-bold py-2 rounded-lg text-center text-xs"
-                  >
-                    নাগরিক লগইন
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      openAuth('signup');
-                    }}
-                    className="flex-1 bg-emerald-900 text-white font-bold py-2 rounded-lg text-center text-xs border border-emerald-700"
-                  >
-                    নিবন্ধন
-                  </button>
-                </div>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openAuth('login');
+                  }}
+                  className="w-full bg-white text-emerald-800 font-bold py-2 rounded-lg text-center text-xs shadow-xs"
+                >
+                  নাগরিক ও অ্যাডমিন লগইন
+                </button>
               ) : (
                 <button
                   onClick={() => {

@@ -463,9 +463,23 @@ export default function FloatingChatWidget({
             <div className="flex items-center space-x-1 text-white/80">
               {isLoggedIn && !isMinimized && (
                 <>
-                  
+                  <button
+                    onClick={handleRenewChat}
+                    title="নতুন চ্যাট শুরু করুন (Renew Chat)"
+                    className="p-1.5 hover:bg-white/20 rounded-lg transition-colors flex items-center gap-1 text-[11px] font-bold"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">রিনিউ</span>
+                  </button>
 
-                  
+                  <button
+                    onClick={handleEndSession}
+                    title="সেশন বন্ধ / লগআউট"
+                    className="p-1.5 hover:bg-red-500/30 text-red-100 hover:text-white rounded-lg transition-colors flex items-center gap-1 text-[11px] font-bold"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">লগআউট</span>
+                  </button>
                 </>
               )}
 
@@ -491,7 +505,7 @@ export default function FloatingChatWidget({
           {!isMinimized && (
             <div className="flex-1 flex flex-col min-h-0 bg-slate-50 relative">
               {/* ============================================================== */}
-              {/* 1. NOT LOGGED IN: SHOW LOGIN / REGISTER INTERFACE INSIDE POPUP */}
+              {/* 1. NOT LOGGED IN: SHOW LOGIN INTERFACE INSIDE POPUP            */}
               {/* ============================================================== */}
               {!isLoggedIn ? (
                 <div className="flex-1 overflow-y-auto p-5 flex flex-col justify-center bg-gradient-to-b from-emerald-50/40 via-white to-slate-50">
@@ -505,7 +519,7 @@ export default function FloatingChatWidget({
                         নাগরিক এআই চ্যাট লগইন
                       </h3>
                       <p className="text-xs text-slate-500 leading-relaxed">
-                        এআই সহকারীর সাথে চ্যাট করতে এবং সেবা সংক্রান্ত তথ্য জানতে অনুগ্রহ করে লগইন করুন।
+                        এআই সহকারীর সাথে চ্যাট করতে অ্যাডমিন কর্তৃক প্রদত্ত লগইন ক্রেডেনশিয়াল দিন।
                       </p>
                     </div>
 
@@ -521,32 +535,6 @@ export default function FloatingChatWidget({
                       </div>
                     )}
 
-                    {/* Auth Mode Toggle */}
-                    <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
-                      <button
-                        type="button"
-                        onClick={() => { setAuthMode('login'); setAuthError(null); }}
-                        className={`flex-1 py-1.5 rounded-lg transition-all ${
-                          authMode === 'login'
-                            ? 'bg-white text-emerald-800 shadow-xs border border-slate-200/60'
-                            : 'text-slate-600 hover:text-slate-900'
-                        }`}
-                      >
-                        লগইন (Login)
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => { setAuthMode('register'); setAuthError(null); }}
-                        className={`flex-1 py-1.5 rounded-lg transition-all ${
-                          authMode === 'register'
-                            ? 'bg-white text-emerald-800 shadow-xs border border-slate-200/60'
-                            : 'text-slate-600 hover:text-slate-900'
-                        }`}
-                      >
-                        নতুন নিবন্ধন (Register)
-                      </button>
-                    </div>
-
                     {/* Error Box */}
                     {authError && (
                       <div className="bg-red-50 border border-red-200 rounded-xl p-2.5 text-xs text-red-700 flex items-start gap-2 animate-in fade-in">
@@ -556,152 +544,100 @@ export default function FloatingChatWidget({
                     )}
 
                     {/* LOGIN FORM */}
-                    {authMode === 'login' ? (
-                      <form onSubmit={handleLogin} className="space-y-3">
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                            ব্যবহারকারীর নাম বা ইমেইল
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              value={loginUsername}
-                              onChange={(e) => setLoginUsername(e.target.value)}
-                              placeholder="যেমন: admin বা user@mail.com"
-                              required
-                              className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
-                            />
-                            <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                          </div>
+                    <form onSubmit={handleLogin} className="space-y-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                          ব্যবহারকারীর নাম বা ইমেইল
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            value={loginUsername}
+                            onChange={(e) => setLoginUsername(e.target.value)}
+                            placeholder="যেমন: admin বা user"
+                            required
+                            className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                          />
+                          <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                         </div>
+                      </div>
 
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                            পাসওয়ার্ড
-                          </label>
-                          <div className="relative">
-                            <input
-                              type={showPassword ? 'text' : 'password'}
-                              value={loginPassword}
-                              onChange={(e) => setLoginPassword(e.target.value)}
-                              placeholder="••••••••"
-                              required
-                              className="w-full pl-9 pr-9 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
-                            />
-                            <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                            <button
-                              type="button"
-                              onClick={() => setShowPassword(!showPassword)}
-                              className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
-                            >
-                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
-                          </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                          পাসওয়ার্ড
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showPassword ? 'text' : 'password'}
+                            value={loginPassword}
+                            onChange={(e) => setLoginPassword(e.target.value)}
+                            placeholder="••••••••"
+                            required
+                            className="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                          />
+                          <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
                         </div>
+                      </div>
 
-                        <button
-                          type="submit"
-                          disabled={isAuthenticating}
-                          className="w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] disabled:opacity-50 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center gap-2"
-                        >
-                          {isAuthenticating ? (
-                            <>
-                              <RefreshCw className="w-4 h-4 animate-spin" />
-                              <span>লগইন হচ্ছে...</span>
-                            </>
-                          ) : (
-                            <>
-                              <UserCheck className="w-4 h-4" />
-                              <span>লগইন করুন ও চ্যাট শুরু করুন</span>
-                            </>
-                          )}
-                        </button>
+                      <button
+                        type="submit"
+                        disabled={isAuthenticating}
+                        className="w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] disabled:opacity-50 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center gap-2"
+                      >
+                        {isAuthenticating ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                            <span>লগইন হচ্ছে...</span>
+                          </>
+                        ) : (
+                          <>
+                            <UserCheck className="w-4 h-4" />
+                            <span>লগইন করুন ও চ্যাট শুরু করুন</span>
+                          </>
+                        )}
+                      </button>
 
-                        {/* Quick fill demo credentials button */}
-                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                          <span>ডেমো অ্যাকাউন্ট:</span>
+                      {/* Demo Accounts Quick-Fill */}
+                      <div className="pt-2 border-t border-slate-100 space-y-1.5">
+                        <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                          <span>ডেমো ক্রেডেনশিয়াল:</span>
+                          <span className="text-[10px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">ক্লিক করে পূরণ করুন</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
                           <button
                             type="button"
                             onClick={() => handleFillDemo('admin', 'admin123')}
-                            className="text-emerald-700 hover:underline font-bold bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200 transition-colors"
+                            className="text-left text-xs bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 p-2 rounded-xl border border-slate-200 transition-all"
                           >
-                            অ্যাডমিন (admin / admin123)
+                            <p className="font-bold text-slate-800 flex items-center gap-1">
+                              <span> অ্যাডমিন</span>
+                            </p>
+                            <p className="text-[10px] text-slate-500 font-mono">admin / admin123</p>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleFillDemo('user', 'user123')}
+                            className="text-left text-xs bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 p-2 rounded-xl border border-slate-200 transition-all"
+                          >
+                            <p className="font-bold text-slate-800 flex items-center gap-1">
+                              <span> নাগরিক ইউজার</span>
+                            </p>
+                            <p className="text-[10px] text-slate-500 font-mono">user / user123</p>
                           </button>
                         </div>
-                      </form>
-                    ) : (
-                      /* REGISTER FORM */
-                      <form onSubmit={handleRegister} className="space-y-3">
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                            আপনার সম্পূর্ণ নাম
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              value={regName}
-                              onChange={(e) => setRegName(e.target.value)}
-                              placeholder="যেমন: মোঃ রহমান"
-                              required
-                              className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
-                            />
-                            <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                            ইমেইল বা মোবাইল নম্বর
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="email"
-                              value={regEmail}
-                              onChange={(e) => setRegEmail(e.target.value)}
-                              placeholder="user@example.com"
-                              required
-                              className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
-                            />
-                            <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                            পাসওয়ার্ড তৈরি করুন
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="password"
-                              value={regPassword}
-                              onChange={(e) => setRegPassword(e.target.value)}
-                              placeholder="কমপক্ষে ৬ অক্ষর"
-                              required
-                              className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
-                            />
-                            <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                          </div>
-                        </div>
-
-                        <button
-                          type="submit"
-                          disabled={isAuthenticating}
-                          className="w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] disabled:opacity-50 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center gap-2"
-                        >
-                          {isAuthenticating ? (
-                            <>
-                              <RefreshCw className="w-4 h-4 animate-spin" />
-                              <span>নিবন্ধন হচ্ছে...</span>
-                            </>
-                          ) : (
-                            <>
-                              <Shield className="w-4 h-4" />
-                              <span>নিবন্ধন সম্পন্ন করুন</span>
-                            </>
-                          )}
-                        </button>
-                      </form>
-                    )}
+                        <p className="text-[10px] text-slate-400 text-center pt-1">
+                          * নতুন ইউজার তৈরি কেবল সিস্টেম অ্যাডমিন করতে পারেন
+                        </p>
+                      </div>
+                    </form>
                   </div>
                 </div>
               ) : (
@@ -760,8 +696,7 @@ export default function FloatingChatWidget({
                                     </>
                                   ) : (
                                     <>
-                                      <Volume2 className="w-3.5 h-3.5" />
-                                      <span className="text-[10px]">শুনুন</span>
+                                      
                                     </>
                                   )}
                                 </button>
