@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import {
   LayoutDashboard,
   FileText,
-  HelpCircle,
+  Search,
   Users,
   LogOut,
   Database,
@@ -19,7 +19,7 @@ import {
 const NAV_ITEMS = [
   { href: '/admin', label: 'Dashboard & Stats', icon: LayoutDashboard },
   { href: '/admin/documents', label: 'PDF Documents KB', icon: FileText },
-  { href: '/admin/faqs', label: 'FAQ Knowledge Base', icon: HelpCircle },
+  { href: '/admin/search', label: 'RAG Retrieval Inspector', icon: Search },
   { href: '/admin/users', label: 'Registered Users', icon: Users },
 ];
 

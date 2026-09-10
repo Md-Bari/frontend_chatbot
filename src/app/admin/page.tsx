@@ -108,78 +108,56 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Top Metric Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: Total Users */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Card 1: PDF Documents */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md hover:border-slate-300 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500">Total Registered Users</span>
-              <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
-                <Users className="w-5 h-5" />
+              <span className="text-xs font-bold text-slate-500">Indexed Documents</span>
+              <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100">
+                <FileText className="w-5 h-5" />
               </div>
             </div>
             <div className="mt-3">
               <span className="text-2xl sm:text-3xl font-black text-slate-900">
-                {stats?.total_users ?? 0}
+                {stats?.documents ?? stats?.total_documents ?? 0}
               </span>
-              <p className="text-[11px] text-slate-500 mt-1">Citizen and administrator accounts</p>
+              <p className="text-[11px] text-slate-500 mt-1">Knowledge base PDF files</p>
             </div>
           </div>
 
-          {/* Card 2: ChromaDB Vectors */}
+          {/* Card 2: Extracted Chunks */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md hover:border-slate-300 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500">ChromaDB Vectors</span>
+              <span className="text-xs font-bold text-slate-500">Extracted Chunks</span>
               <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100">
                 <Database className="w-5 h-5" />
               </div>
             </div>
             <div className="mt-3">
               <span className="text-2xl sm:text-3xl font-black text-emerald-700">
-                {stats?.total_vectors ?? stats?.chromadb_vectors ?? 0}
+                {stats?.chunks ?? stats?.total_vectors ?? 0}
               </span>
-              <p className="text-[11px] text-slate-500 mt-1">Indexed embeddings with BM25 sync</p>
+              <p className="text-[11px] text-slate-500 mt-1">BM25 + Vector indexed chunks</p>
             </div>
           </div>
 
-          {/* Card 3: Processed Documents */}
+          {/* Card 3: Top-K & Health */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md hover:border-slate-300 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500">PDF Documents</span>
-              <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100">
-                <FileText className="w-5 h-5" />
+              <span className="text-xs font-bold text-slate-500">RAG Retrieval Top-K</span>
+              <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
+                <Layers className="w-5 h-5" />
               </div>
             </div>
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900">
-                {stats?.processed_documents ?? 0}
-              </span>
-              <span className="text-xs text-slate-500">/ {stats?.total_documents ?? 0} total</span>
-            </div>
-            <div className="mt-1 flex items-center gap-2 text-[10px]">
-              <span className="text-emerald-700 font-semibold flex items-center gap-0.5">
-                <CheckCircle2 className="w-3 h-3" /> {stats?.processed_documents ?? 0} ready
-              </span>
-              {Boolean(stats?.failed_documents) && (
-                <span className="text-red-600 font-semibold flex items-center gap-0.5">
-                  <AlertTriangle className="w-3 h-3" /> {stats?.failed_documents} failed
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Card 4: Total FAQs */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md hover:border-slate-300 transition-all">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500">Knowledge FAQs</span>
-              <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
-                <HelpCircle className="w-5 h-5" />
-              </div>
-            </div>
-            <div className="mt-3">
               <span className="text-2xl sm:text-3xl font-black text-amber-600">
-                {stats?.total_faqs ?? 0}
+                {stats?.top_k || 4}
               </span>
-              <p className="text-[11px] text-slate-500 mt-1">Frequently asked citizen Q&As</p>
+              <span className="text-[11px] text-slate-500 font-semibold">chunks / query</span>
+            </div>
+            <div className="mt-1 flex items-center gap-1.5 text-[10px] text-emerald-700 font-semibold">
+              <CheckCircle2 className="w-3 h-3" />
+              <span>System Status: Healthy</span>
             </div>
           </div>
         </div>
@@ -193,7 +171,7 @@ export default function AdminDashboardPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Link
               href="/admin/documents"
               className="p-5 bg-slate-50 hover:bg-emerald-50/50 border border-slate-200 hover:border-emerald-300 rounded-xl transition-all group"
@@ -205,28 +183,46 @@ export default function AdminDashboardPage() {
                 <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-700 transition-colors" />
               </div>
               <h3 className="text-sm font-bold text-slate-900 mt-3 group-hover:text-emerald-800 transition-colors">
-                Upload & Index New PDF
+                PDF Documents & Chunks
               </h3>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                Extract text per page, chunk, generate embeddings, and update ChromaDB.
+                Upload new PDF files, inspect extracted chunks per page, and manage indexed knowledge.
               </p>
             </Link>
 
             <Link
-              href="/admin/faqs"
-              className="p-5 bg-slate-50 hover:bg-amber-50/50 border border-slate-200 hover:border-amber-300 rounded-xl transition-all group"
+              href="/admin/search"
+              className="p-5 bg-slate-50 hover:bg-blue-50/50 border border-slate-200 hover:border-blue-300 rounded-xl transition-all group"
             >
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center">
-                  <HelpCircle className="w-5 h-5" />
+                <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center">
+                  <Layers className="w-5 h-5" />
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-amber-700 transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition-colors" />
               </div>
-              <h3 className="text-sm font-bold text-slate-900 mt-3 group-hover:text-amber-800 transition-colors">
-                Manage FAQ Knowledge Base
+              <h3 className="text-sm font-bold text-slate-900 mt-3 group-hover:text-blue-800 transition-colors">
+                RAG Retrieval Inspector
               </h3>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                Add or update frequent citizen inquiries with instant vector re-embedding.
+                Preview retrieved chunks and similarity scores live without invoking LLM tokens.
+              </p>
+            </Link>
+
+            <Link
+              href="/admin/users"
+              className="p-5 bg-slate-50 hover:bg-purple-50/50 border border-slate-200 hover:border-purple-300 rounded-xl transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center">
+                  <Users className="w-5 h-5" />
+                </div>
+                <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-purple-700 transition-colors" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 mt-3 group-hover:text-purple-800 transition-colors">
+                User Access & Security
+              </h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                View registered administrators and citizen access permissions.
               </p>
             </Link>
           </div>

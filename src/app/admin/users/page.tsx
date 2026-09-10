@@ -43,9 +43,10 @@ export default function AdminUsersPage() {
   // Filter users based on search
   const filteredUsers = users.filter(
     (u) =>
-      u.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-      u.email.toLowerCase().includes(searchFilter.toLowerCase()) ||
-      u.role.toLowerCase().includes(searchFilter.toLowerCase())
+      (u.name && u.name.toLowerCase().includes(searchFilter.toLowerCase())) ||
+      (u.username && u.username.toLowerCase().includes(searchFilter.toLowerCase())) ||
+      (u.email && u.email.toLowerCase().includes(searchFilter.toLowerCase())) ||
+      (u.role && u.role.toLowerCase().includes(searchFilter.toLowerCase()))
   );
 
   // Reset to page 1 when search or pageSize changes

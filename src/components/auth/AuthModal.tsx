@@ -201,17 +201,17 @@ export default function AuthModal({
         {mode === 'login' && (
           <form onSubmit={handleLogin} className="space-y-3.5">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">ইমেইল ঠিকানা *</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">ইউজারনেম বা ইমেইল *</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Mail className="w-4 h-4" />
+                  <UserIcon className="w-4 h-4 text-emerald-700" />
                 </div>
                 <input
-                  type="email"
+                  type="text"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="example@gmail.com"
+                  placeholder="admin বা example@gmail.com"
                   className="w-full pl-10 pr-3.5 py-2 text-xs bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 transition-all"
                 />
               </div>
