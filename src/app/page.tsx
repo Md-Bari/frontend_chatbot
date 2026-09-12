@@ -147,7 +147,7 @@ const SERVICE_CARDS = [
     tag: 'নতুন আবেদন',
     icon: FileSpreadsheet,
     color: 'from-emerald-600 to-green-600',
-    prompt: 'নতুন জন্ম নিবন্ধন আবেদনের নিয়ম ও প্রয়োজনীয় নথিপত্র কি কি?',
+    prompt: 'সন্তানের জন্ম নিবন্ধনের ক্ষেত্রে বাবা-মায়ের কোন তথ্য প্রয়োজন?',
   },
   {
     title: 'মৃত্যু নিবন্ধন আবেদন',
@@ -155,23 +155,23 @@ const SERVICE_CARDS = [
     tag: 'নাগরিক সেবা',
     icon: FileCheck2,
     color: 'from-teal-600 to-cyan-600',
-    prompt: 'মৃত্যু নিবন্ধন করতে কি কি কাগজপত্র প্রয়োজন এবং ফি কত?',
+    prompt: 'মৃত্যু নিবন্ধন করার আগে জন্ম নিবন্ধন থাকা কি প্রয়োজন?',
   },
   {
-    title: 'জন্ম নিবন্ধন সনদ যাচাই',
-    desc: '১৭ ডিজিটের সনদ নম্বর ও জন্ম তারিখ দিয়ে অনলাইন ভেরিফিকেশন',
+    title: 'জন্ম নিবন্ধন ১৭ ডিজিটে উন্নীতকরণ',
+    desc: 'পুরাতন সনদ জমা দিয়ে ১৭ ডিজিটের ডিজিটাল নম্বর গ্রহণ',
     tag: 'ভেরিফিকেশন',
     icon: ShieldCheck,
     color: 'from-blue-600 to-indigo-600',
-    prompt: 'অনলাইনে জন্ম সনদ ভেরিফাই বা যাচাই করার নিয়ম বিস্তারিত বলুন',
+    prompt: '১৭ ডিজিটের কম জন্ম নিবন্ধন নম্বরকে কীভাবে ১৭ ডিজিটে উন্নীত করা যায়?',
   },
   {
-    title: 'সনদ তথ্য সংশোধন ও ডুপ্লিকেট',
-    desc: 'নাম, বয়স বা অন্যান্য তথ্যের ভুল সংশোধন ও প্রিন্ট কপি',
+    title: 'সনদ ও মোবাইল নম্বর সংশোধন',
+    desc: 'নাম, মোবাইল নম্বর বা অন্যান্য তথ্যের ভুল সংশোধন প্রক্রিয়া',
     tag: 'সংশোধন',
     icon: Layers,
     color: 'from-amber-600 to-orange-600',
-    prompt: 'জন্ম সনদে ভুল নাম বা বয়স কিভাবে সংশোধন করা যাবে?',
+    prompt: 'জন্ম ও মৃত্যু সনদে মোবাইল নম্বর সংশোধন বা সংযোজন করা যায় কি?',
   },
 ];
 
@@ -180,29 +180,29 @@ const CITIZEN_NOTICES = [
     id: 1,
     tag: 'বাধ্যতামূলক',
     tagColor: 'bg-red-600',
-    text: '🔴 জন্ম ও মৃত্যু নিবন্ধন আইন ২০০৪ অনুযায়ী সন্তান জন্মের ৪৫ দিনের মধ্যে নিবন্ধন সম্পন্ন করা সকলের জন্য বাধ্যতামূলক।',
-    prompt: 'জন্ম নিবন্ধনের ৪৫ দিনের সময়সীমা ও বিধান সম্পর্কে বলুন',
+    text: '🔴 জন্ম ও মৃত্যু নিবন্ধন আইন ২০০৪ অনুযায়ী সন্তান জন্মের ৪৫ দিনের মধ্যে নিবন্ধন সম্পন্ন করা বাধ্যতামূলক।',
+    prompt: 'জন্ম নিবন্ধন কি সবার জন্য বাধ্যতামূলক?',
   },
   {
     id: 2,
     tag: 'জরিমানা বিধিমালা',
     tagColor: 'bg-amber-700',
     text: '⚠️ ধারা ৫(১), ৬ক এবং ৮(১) লঙ্ঘন করলে অনধিক ৫,০০০ টাকা অর্থদণ্ডে দণ্ডিত হতে পারেন।',
-    prompt: 'জন্ম ও মৃত্যু নিবন্ধন আইন লঙ্ঘনের জরিমানা ও শাস্তি কি?',
+    prompt: 'জন্ম নিবন্ধন না করলে সর্বোচ্চ কত টাকা জরিমানা হতে পারে?',
   },
   {
     id: 3,
     tag: '১৯টি ক্ষেত্রে ব্যবহার',
     tagColor: 'bg-emerald-700',
     text: '📋 বিদ্যালয়ে ভর্তি, পাসপোর্ট, জাতীয় পরিচয়পত্রসহ ১৯টি জরুরি নাগরিক সেবায় ডিজিটাল জন্ম সনদ আবশ্যক।',
-    prompt: '১৯টি ক্ষেত্রে জন্ম সনদের ব্যবহার ও প্রয়োজনীয়তার তালিকা দিন',
+    prompt: 'কোন কোন ক্ষেত্রে জন্ম সনদ প্রয়োজন হয়?',
   },
   {
     id: 4,
-    tag: 'সরকারি ফি',
+    tag: 'ফ্যামিলি ট্রি ও মোবাইল নম্বর',
     tagColor: 'bg-blue-700',
-    text: '💳 সরকারি ফি: ৪৫ দিন পর্যন্ত বিনামূল্যে (০ টাকা), ৫ বছর পর্যন্ত ২৫ টাকা এবং ৫ বছরের ঊর্ধ্বে ৫০ টাকা।',
-    prompt: 'জন্ম ও মৃত্যু নিবন্ধনের সরকারি ফি তালিকা বিস্তারিত জানান',
+    text: '💳 সফটওয়্যারে একটি মোবাইল নম্বর দিয়ে পরিবারের সর্বোচ্চ ৫ জন সদস্যের নিবন্ধনের ব্যবস্থা রয়েছে।',
+    prompt: 'একটি মোবাইল নম্বর দিয়ে সর্বোচ্চ কতজন পরিবারের সদস্যের নিবন্ধন করা যায়?',
   },
 ];
 
@@ -314,22 +314,28 @@ export default function HomePage() {
           <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-[11px] text-emerald-200">
             <span className="opacity-80">জনপ্রিয় জিজ্ঞাসা:</span>
             <button
-              onClick={() => openChatWithPrompt('জন্ম নিবন্ধনে কি কি কাগজপত্র লাগবে?')}
+              onClick={() => openChatWithPrompt('জন্ম নিবন্ধন কি সবার জন্য বাধ্যতামূলক?')}
               className="bg-emerald-800/60 hover:bg-emerald-700/80 px-2.5 py-1 rounded-full border border-emerald-700/50 transition-colors"
             >
-              প্রয়োজনীয় কাগজপত্র
+              বাধ্যতামূলক কিনা?
             </button>
             <button
-              onClick={() => openChatWithPrompt('জন্ম নিবন্ধন ফি কত টাকা?')}
+              onClick={() => openChatWithPrompt('কোন কোন ক্ষেত্রে জন্ম সনদ প্রয়োজন হয়?')}
               className="bg-emerald-800/60 hover:bg-emerald-700/80 px-2.5 py-1 rounded-full border border-emerald-700/50 transition-colors"
             >
-              সরকারি ফি তালিকা
+              সনদের ব্যবহারক্ষেত্র
             </button>
             <button
-              onClick={() => openChatWithPrompt('অনলাইনে জন্ম নিবন্ধন সনদ কিভাবে যাচাই করব?')}
+              onClick={() => openChatWithPrompt('ম্যানুয়াল জন্ম নিবন্ধন অনলাইনে অন্তর্ভুক্ত করার সুযোগ আছে কি?')}
               className="bg-emerald-800/60 hover:bg-emerald-700/80 px-2.5 py-1 rounded-full border border-emerald-700/50 transition-colors"
             >
-              সনদ যাচাই করার নিয়ম
+              ম্যানুয়াল থেকে অনলাইন
+            </button>
+            <button
+              onClick={() => openChatWithPrompt('Family Tree পদ্ধতি কী এবং কেন ব্যবহার করা হচ্ছে?')}
+              className="bg-emerald-800/60 hover:bg-emerald-700/80 px-2.5 py-1 rounded-full border border-emerald-700/50 transition-colors"
+            >
+              Family Tree পদ্ধতি
             </button>
           </div>
         </div>
@@ -551,10 +557,10 @@ export default function HomePage() {
               <span className="text-xs text-emerald-200 font-semibold">তাৎক্ষণিক সহায়তা প্রয়োজন?</span>
               <p className="text-sm font-bold text-amber-300">হটলাইন: ১৬১২২ অথবা ৩৩৩</p>
               <button
-                onClick={() => openChatWithPrompt('১৯টি ক্ষেত্রে জন্ম সনদের বাধ্যবাধকতা ও ব্যবহারের তালিকা দিন')}
+                onClick={()=>window.open('https://bdris.gov.bd/contact')}
                 className="w-full bg-amber-400 hover:bg-amber-300 text-emerald-950 text-xs font-bold py-2 rounded-lg transition-colors"
               >
-                এআই থেকে তালিকা দেখুন
+                যোগাযোগ করুন
               </button>
             </div>
           </div>
