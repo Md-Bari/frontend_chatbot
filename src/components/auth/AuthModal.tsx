@@ -146,7 +146,7 @@ export default function AuthModal({
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="যেমন: admin বা user"
+                  placeholder="যেমন: admin বা demo"
                   className="w-full pl-10 pr-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 transition-all"
                 />
               </div>
@@ -214,28 +214,24 @@ export default function AuthModal({
                 <button
                   type="button"
                   onClick={() => handleFillDemo('admin', 'admin123')}
-                  className="text-left bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 p-2.5 rounded-xl border border-slate-200 transition-all"
+                  className="text-left bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 p-2.5 rounded-xl border border-slate-200 transition-all cursor-pointer"
                 >
-                  <p className="font-bold text-xs text-slate-800 flex items-center gap-1">
-                    <span>👑 অ্যাডমিন</span>
-                  </p>
+                  <p className="font-bold text-xs text-slate-800">অ্যাডমিন</p>
                   <p className="text-[10px] text-slate-500 font-mono mt-0.5">admin / admin123</p>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => handleFillDemo('user', 'user123')}
-                  className="text-left bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 p-2.5 rounded-xl border border-slate-200 transition-all"
+                  onClick={() => handleFillDemo('demo', 'demo123')}
+                  className="text-left bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 p-2.5 rounded-xl border border-slate-200 transition-all cursor-pointer"
                 >
-                  <p className="font-bold text-xs text-slate-800 flex items-center gap-1">
-                    <span>👤 নাগরিক ইউজার</span>
-                  </p>
-                  <p className="text-[10px] text-slate-500 font-mono mt-0.5">user / user123</p>
+                  <p className="font-bold text-xs text-slate-800">নাগরিক ইউজার</p>
+                  <p className="text-[10px] text-slate-500 font-mono mt-0.5">demo / demo123</p>
                 </button>
               </div>
 
               <p className="text-[11px] text-slate-400 text-center pt-1">
-                ℹ️ নতুন ইউজার একাউন্ট কেবলমাত্র সিস্টেম অ্যাডমিন তৈরি করতে পারেন।
+                নতুন ইউজার একাউন্ট কেবলমাত্র সিস্টেম অ্যাডমিন তৈরি করতে পারেন।
               </p>
             </div>
           </form>

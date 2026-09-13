@@ -12,11 +12,12 @@ import {
   HelpCircle,
   Menu,
   X,
-  UserPlus
+  UserPlus,
+  LayoutDashboard
 } from 'lucide-react';
 
 export default function Navbar({ onOpenChat }: { onOpenChat?: () => void }) {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const [lang, setLang] = useState<'bn' | 'en'>('bn');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -80,35 +81,71 @@ export default function Navbar({ onOpenChat }: { onOpenChat?: () => void }) {
           {/* Action icons & User Session */}
           <div className="hidden md:flex items-center space-x-3">
             {user ? (
-              <div className="relative">
-                <button
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700 transition-colors"
-                >
-                  <div className="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center text-[10px] font-bold">
-                    {user.name ? user.name[0].toUpperCase() : 'U'}
-                  </div>
-                  <span className="max-w-[120px] truncate">{user.name || user.email}</span>
-                </button>
-
-                {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-                    <div className="px-3 py-1.5 border-b border-gray-100 text-xs text-gray-500">
-                      <p className="font-semibold text-gray-800 truncate">{user.name}</p>
-                      <p className="truncate text-[10px]">{user.email}</p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setUserMenuOpen(false);
-                        logout();
-                      }}
-                      className="w-full text-left px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 flex items-center gap-2"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      লগ আউট (Sign Out)
-                    </button>
-                  </div>
+              <div className="flex items-center gap-2">
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    className="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all shadow-xs border border-emerald-700 hover:border-emerald-600 active:scale-95"
+                  >
+                    <LayoutDashboard className="w-3.5 h-3.5 text-amber-300" />
+                    <span>অ্যাডমিন ড্যাশবোর্ড</span>
+                  </Link>
                 )}
+
+                <div className="relative">
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-800 transition-colors shadow-2xs cursor-pointer"
+                  >
+                    <div className="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center text-xs font-bold shadow-xs">
+                      {(user.name || user.username || user.email || 'U')[0].toUpperCase()}
+                    </div>
+                    <div className="text-left flex flex-col">
+                      <span className="max-w-[130px] truncate leading-tight font-bold text-slate-900">
+                        {user.name || user.username || user.email || 'ইউজার'}
+                      </span>
+                      <span className="text-[9px] text-emerald-700 font-mono uppercase font-semibold leading-none">
+                        {isAdmin ? 'অ্যাডমিন' : 'নাগরিক'}
+                      </span>
+                    </div>
+                  </button>
+
+                  {userMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                      <div className="px-3.5 py-2.5 border-b border-slate-100 text-xs">
+                        <p className="font-bold text-slate-900 truncate">
+                          {user.name || user.username || 'ইউজার'}
+                        </p>
+                        {user.email && <p className="truncate text-[10px] text-slate-500">{user.email}</p>}
+                        <span className="inline-block mt-1 text-[10px] px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md font-mono font-bold">
+                          {isAdmin ? 'Administrator' : 'Citizen User'}
+                        </span>
+                      </div>
+
+                      {isAdmin && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="w-full text-left px-3.5 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-50 flex items-center gap-2 border-b border-slate-100 transition-colors"
+                        >
+                          <LayoutDashboard className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>অ্যাডমিন ড্যাশবোর্ড</span>
+                        </Link>
+                      )}
+
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          logout();
+                        }}
+                        className="w-full text-left px-3.5 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors cursor-pointer"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>লগ আউট (Sign Out)</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="flex items-center space-x-1.5">
@@ -186,15 +223,28 @@ export default function Navbar({ onOpenChat }: { onOpenChat?: () => void }) {
                   নাগরিক ও অ্যাডমিন লগইন
                 </button>
               ) : (
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    logout();
-                  }}
-                  className="w-full bg-red-600 text-white font-bold py-2 rounded-lg text-center text-xs"
-                >
-                  লগ আউট ({user.name || user.email})
-                </button>
+                <div className="space-y-2">
+                  {isAdmin && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2 rounded-lg text-center text-xs flex items-center justify-center gap-2 shadow-xs"
+                    >
+                      <LayoutDashboard className="w-3.5 h-3.5 text-amber-300" />
+                      <span>অ্যাডমিন ড্যাশবোর্ড</span>
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg text-center text-xs flex items-center justify-center gap-2"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>লগ আউট ({user.name || user.username || user.email})</span>
+                  </button>
+                </div>
               )}
               <button
                 onClick={() => {

@@ -14,8 +14,7 @@ import {
   Volume2,
   VolumeX,
   Sparkles,
-  Minimize2,
-  Maximize2,
+  Minus,
   X,
   Lock,
   Mail,
@@ -65,9 +64,8 @@ export default function FloatingChatWidget({
   // Global auth context (syncs with top navbar login)
   const { user: globalUser, login: globalLogin, register: globalRegister, logout: globalLogout } = useAuth();
 
-  // Drawer open and minimize states
+  // Drawer open state
   const [internalIsOpen, setInternalIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
 
   const isOpen = propIsOpen !== undefined ? propIsOpen : internalIsOpen;
 
@@ -112,7 +110,6 @@ export default function FloatingChatWidget({
   useEffect(() => {
     if (propIsOpen !== undefined) {
       setInternalIsOpen(propIsOpen);
-      if (propIsOpen) setIsMinimized(false);
     }
   }, [propIsOpen]);
 
@@ -121,7 +118,6 @@ export default function FloatingChatWidget({
     if (defaultPrompt && defaultPrompt.trim()) {
       const promptToSend = defaultPrompt.trim();
       setInternalIsOpen(true);
-      setIsMinimized(false);
       if (propOnOpenRef.current) propOnOpenRef.current();
 
       if (isLoggedIn) {
@@ -401,7 +397,6 @@ export default function FloatingChatWidget({
       if (propOnClose) propOnClose();
     } else {
       setInternalIsOpen(true);
-      setIsMinimized(false);
       if (propOnOpen) propOnOpen();
     }
   };
@@ -409,11 +404,11 @@ export default function FloatingChatWidget({
   return (
     <>
       {/* Floating Bottom-Right Launcher Icon Button */}
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
+      <div className="fixed bottom-8 sm:bottom-10 right-8 sm:right-12 z-50 flex flex-col items-end">
         {!isOpen && (
           <div
             onClick={toggleOpen}
-            className="mb-2 bg-white text-emerald-950 px-3 py-1.5 rounded-full shadow-lg border border-emerald-100 flex items-center gap-1.5 text-xs font-semibold animate-bounce cursor-pointer hover:bg-emerald-50 transition-colors"
+            className="mb-2.5 bg-white text-emerald-950 px-3.5 py-1.5 rounded-full shadow-lg border border-emerald-100 flex items-center gap-1.5 text-xs font-semibold animate-bounce cursor-pointer hover:bg-emerald-50 transition-colors"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
             <span>নাগরিক সহায়তা এআই চ্যাট</span>
@@ -424,14 +419,14 @@ export default function FloatingChatWidget({
           onClick={toggleOpen}
           id="chatbot-launcher-btn"
           aria-label="Toggle AI Chat Assistant"
-          className="relative group w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-700 via-emerald-600 to-green-500 text-white shadow-xl hover:shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white focus:outline-none focus:ring-4 focus:ring-emerald-400/50"
+          className="relative group w-16 h-16 sm:w-[68px] sm:h-[68px] rounded-full bg-gradient-to-tr from-emerald-700 via-emerald-600 to-green-500 text-white shadow-xl hover:shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white focus:outline-none focus:ring-4 focus:ring-emerald-400/50"
         >
           {isOpen ? (
-            <X className="w-6 h-6 text-white" />
+            <X className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
           ) : (
             <div className="relative">
-              <Bot className="w-7 h-7 text-white" />
-              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-400 border-2 border-emerald-700 rounded-full"></span>
+              <Bot className="w-8 h-8 sm:w-9 sm:h-9 text-white" />
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 border-2 border-emerald-700 rounded-full"></span>
             </div>
           )}
         </button>
@@ -439,13 +434,7 @@ export default function FloatingChatWidget({
 
       {/* Main Chat Drawer / Window */}
       {isOpen && (
-        <div
-          className={`fixed z-50 transition-all duration-300 ease-in-out shadow-2xl rounded-2xl bg-white border border-slate-200 flex flex-col overflow-hidden ${
-            isMinimized
-              ? 'bottom-20 right-5 w-80 h-14'
-              : 'bottom-20 right-4 sm:right-6 w-[92vw] sm:w-[420px] md:w-[460px] h-[590px] max-h-[85vh]'
-          }`}
-        >
+        <div className="fixed z-50 transition-all duration-300 ease-in-out shadow-2xl rounded-2xl bg-white border border-slate-200 flex flex-col overflow-hidden bottom-26 sm:bottom-30 right-4 sm:right-12 w-[92vw] sm:w-[420px] md:w-[460px] h-[590px] max-h-[85vh]">
           {/* Header Bar */}
           <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-green-700 text-white px-4 py-3 flex items-center justify-between shadow-xs select-none">
             <div className="flex items-center space-x-2.5">
@@ -465,34 +454,12 @@ export default function FloatingChatWidget({
             </div>
 
             <div className="flex items-center space-x-1 text-white/80">
-              {isLoggedIn && !isMinimized && (
-                <>
-                  <button
-                    onClick={handleRenewChat}
-                    title="নতুন চ্যাট শুরু করুন (Renew Chat)"
-                    className="p-1.5 hover:bg-white/20 rounded-lg transition-colors flex items-center gap-1 text-[11px] font-bold"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">রিনিউ</span>
-                  </button>
-
-                  <button
-                    onClick={handleEndSession}
-                    title="সেশন বন্ধ / লগআউট"
-                    className="p-1.5 hover:bg-red-500/30 text-red-100 hover:text-white rounded-lg transition-colors flex items-center gap-1 text-[11px] font-bold"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">লগআউট</span>
-                  </button>
-                </>
-              )}
-
               <button
-                onClick={() => setIsMinimized(!isMinimized)}
-                title={isMinimized ? 'বড় করুন' : 'ছোট করুন'}
+                onClick={toggleOpen}
+                title="মিনিমাইজ করুন"
                 className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
               >
-                {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
+                <Minus className="w-4 h-4" />
               </button>
 
               <button
@@ -506,8 +473,7 @@ export default function FloatingChatWidget({
           </div>
 
           {/* Chat Window Body */}
-          {!isMinimized && (
-            <div className="flex-1 flex flex-col min-h-0 bg-slate-50 relative">
+          <div className="flex-1 flex flex-col min-h-0 bg-slate-50 relative">
               {/* ============================================================== */}
               {/* 1. NOT LOGGED IN: SHOW LOGIN INTERFACE INSIDE POPUP            */}
               {/* ============================================================== */}
@@ -558,7 +524,7 @@ export default function FloatingChatWidget({
                             type="text"
                             value={loginUsername}
                             onChange={(e) => setLoginUsername(e.target.value)}
-                            placeholder="যেমন: admin বা user"
+                            placeholder="যেমন: admin বা demo"
                             required
                             className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
                           />
@@ -806,7 +772,6 @@ export default function FloatingChatWidget({
                 </>
               )}
             </div>
-          )}
         </div>
       )}
     </>
