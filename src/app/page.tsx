@@ -298,7 +298,7 @@ export default function HomePage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="যেকোনো প্রশ্ন লিখুন (যেমন: জন্ম নিবন্ধনের ফি কত? সংশোধনের নিয়ম কি?)..."
+              placeholder="যেকোনো প্রশ্ন লিখুন..."
               className="flex-1 bg-transparent border-0 text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none py-2.5 px-2"
             />
             <button
