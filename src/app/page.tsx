@@ -306,7 +306,6 @@ export default function HomePage() {
               className="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-2"
             >
               <span>সন্ধান করুন</span>
-              <Sparkles className="w-4 h-4 text-amber-300" />
             </button>
           </form>
 
