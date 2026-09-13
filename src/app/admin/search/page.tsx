@@ -116,10 +116,10 @@ export default function AdminSearchPage() {
               <span className="font-semibold text-slate-600">Sample Queries:</span>
               <button
                 type="button"
-                onClick={() => handleQuickQuery('জন্ম নিবন্ধনের সরকারি ফি কত টাকা?')}
+                onClick={() => handleQuickQuery('পিতা-মাতার জন্ম নিবন্ধন না থাকলে সন্তানের নিবন্ধন করণীয় কী?')}
                 className="bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200 transition-colors"
               >
-                সরকারি ফি
+                পিতা-মাতার সনদ ছাড়া নিবন্ধন
               </button>
               <button
                 type="button"
@@ -137,10 +137,10 @@ export default function AdminSearchPage() {
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickQuery('পিতামাতার জন্ম সনদ না থাকলে সন্তানের নিবন্ধন কীভাবে হবে?')}
+                onClick={() => handleQuickQuery('১৭ ডিজিটের কম জন্ম নিবন্ধন নম্বর কিভাবে ১৭ ডিজিটে উন্নীত করা যাবে?')}
                 className="bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200 transition-colors"
               >
-                পিতামাতার সনদ ছাড়া নিবন্ধন
+                ১৭ ডিজিটে উন্নীতকরণ
               </button>
             </div>
           </form>

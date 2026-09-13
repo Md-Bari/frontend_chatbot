@@ -264,8 +264,36 @@ export const adminApi = {
     ];
   },
 
-  // Live FAQs (derived from RAG chunks or knowledge items)
+  // Live FAQs (derived from active knowledge base document chunks)
   async getFaqs(): Promise<FAQItem[]> {
+    try {
+      const docsRes = await this.getDocuments();
+      const docs = docsRes?.documents || [];
+      if (docs.length > 0) {
+        const chunksRes = await this.getDocumentChunks(docs[0].doc_id);
+        const rawChunks: DocumentChunk[] = Array.isArray(chunksRes) ? chunksRes : (chunksRes as any)?.chunks || [];
+        const parsedFaqs: FAQItem[] = [];
+        rawChunks.forEach((chunk, index) => {
+          const text = chunk.text || '';
+          const qMatch = text.match(/^Q:\s*([^\n]+)/i);
+          const aMatch = text.match(/\nA:\s*([\s\S]+)$/i);
+          if (qMatch && aMatch) {
+            parsedFaqs.push({
+              id: index + 1,
+              question: qMatch[1].trim(),
+              answer: aMatch[1].trim(),
+              category: 'বিধিমালা ও নাগরিক সেবা',
+              source: chunk.source || docs[0].filename
+            });
+          }
+        });
+        if (parsedFaqs.length > 0) {
+          return parsedFaqs;
+        }
+      }
+    } catch {
+      // Fallback
+    }
     return [];
   },
 
