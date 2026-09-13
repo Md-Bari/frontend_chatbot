@@ -74,7 +74,7 @@ function AdminLoginForm() {
           Admin Knowledge Portal
         </h1>
         <p className="text-xs text-slate-500 mt-1">
-          Sign in to manage RAG documents, FAQs & vector index
+          Sign in to manage knowledge documents, FAQs, and portal settings
         </p>
       </div>
 

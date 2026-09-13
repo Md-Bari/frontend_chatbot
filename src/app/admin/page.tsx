@@ -83,9 +83,6 @@ export default function AdminDashboardPage() {
                 Live Overview
               </span>
             </h1>
-            <p className="text-xs text-slate-500 mt-1">
-              Real-time monitoring of LangChain Hybrid RAG, indexed documents, and FAQs.
-            </p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -137,14 +134,13 @@ export default function AdminDashboardPage() {
               <span className="text-2xl sm:text-3xl font-black text-emerald-700">
                 {stats?.chunks ?? stats?.total_vectors ?? 0}
               </span>
-              <p className="text-[11px] text-slate-500 mt-1">BM25 + Vector indexed chunks</p>
             </div>
           </div>
 
           {/* Card 3: Top-K & Health */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md hover:border-slate-300 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500">RAG Retrieval Top-K</span>
+              <span className="text-xs font-bold text-slate-500">Retrieval Top-K</span>
               <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
                 <Layers className="w-5 h-5" />
               </div>
@@ -167,7 +163,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
             <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Knowledge Base Quick Actions</span>
+              Knowledge Operations
             </h2>
           </div>
 
@@ -201,7 +197,7 @@ export default function AdminDashboardPage() {
                 <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition-colors" />
               </div>
               <h3 className="text-sm font-bold text-slate-900 mt-3 group-hover:text-blue-800 transition-colors">
-                RAG Retrieval Inspector
+                Search & Retrieval Inspector
               </h3>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                 Preview retrieved chunks and similarity scores live without invoking LLM tokens.

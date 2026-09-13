@@ -84,7 +84,7 @@ export default function AdminDocumentsPage() {
 
     try {
       await adminApi.uploadDocument(file);
-      setUploadSuccess('Document successfully uploaded! Text extracted, chunked, and indexed into ChromaDB & BM25.');
+      setUploadSuccess('Document successfully uploaded! Text extracted, chunked, and indexed into knowledge base.');
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
       setTimeout(() => {
@@ -117,7 +117,7 @@ export default function AdminDocumentsPage() {
   };
 
   const handleDelete = async (docId: string, docFilename: string) => {
-    if (!confirm(`Are you sure you want to delete "${docFilename}"? This will permanently remove its embeddings from ChromaDB.`)) {
+    if (!confirm(`Are you sure you want to delete "${docFilename}"? This will permanently remove it from the knowledge base.`)) {
       return;
     }
     setDeletingId(docId);
@@ -163,7 +163,7 @@ export default function AdminDocumentsPage() {
               <span>PDF Document Knowledge Base</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1">
-              Upload PDF documents for automatic PyMuPDF extraction, chunking, and ChromaDB/BM25 indexing.
+              Upload PDF documents for automatic text extraction, chunking, and knowledge base indexing.
             </p>
           </div>
 
@@ -269,7 +269,7 @@ export default function AdminDocumentsPage() {
 
                       <td className="px-5 py-4">
                         <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase font-mono">
-                          {doc.engine || 'pymupdf'} • {doc.mode || 'numbered'}
+                          Indexed • {doc.mode || 'Standard'}
                         </span>
                       </td>
 
@@ -303,7 +303,7 @@ export default function AdminDocumentsPage() {
                           <button
                             onClick={() => handleDelete(doc.doc_id, doc.filename)}
                             disabled={deletingId === doc.doc_id}
-                            title="Delete from DB & ChromaDB"
+                            title="Delete Document"
                             className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg border border-red-200 transition-colors"
                           >
                             <Trash2 className="w-3.5 h-3.5" />

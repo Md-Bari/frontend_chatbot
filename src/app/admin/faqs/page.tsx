@@ -84,10 +84,10 @@ export default function AdminFaqsPage() {
     try {
       if (isEditing && editId !== null) {
         await adminApi.updateFaq(editId, { question: question.trim(), answer: answer.trim() });
-        setModalSuccess('FAQ updated and ChromaDB vector chunk re-indexed!');
+        setModalSuccess('FAQ updated and re-indexed successfully!');
       } else {
         await adminApi.createFaq({ question: question.trim(), answer: answer.trim() });
-        setModalSuccess('FAQ created and embedded into ChromaDB & BM25 index!');
+        setModalSuccess('FAQ created and indexed successfully!');
       }
 
       setTimeout(() => {
@@ -103,7 +103,7 @@ export default function AdminFaqsPage() {
   };
 
   const handleDelete = async (id: string | number) => {
-    if (!confirm('Are you sure you want to delete this FAQ? It will be removed from ChromaDB and BM25 index.')) {
+    if (!confirm('Are you sure you want to delete this FAQ? It will be removed from the knowledge base.')) {
       return;
     }
     setDeletingId(id);
@@ -134,7 +134,7 @@ export default function AdminFaqsPage() {
               <span>FAQ Knowledge Base Management</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1">
-              Add and curate high-priority Q&A items. Updates automatically sync with ChromaDB vector search.
+              Add and curate high-priority Q&A items. Updates automatically sync with search indexing.
             </p>
           </div>
 
@@ -233,7 +233,7 @@ export default function AdminFaqsPage() {
 
                 <div className="pl-9 flex items-center gap-3 text-[10px] text-slate-400">
                   <span className="flex items-center gap-1 text-emerald-700 font-mono font-semibold">
-                    <Database className="w-3 h-3" /> ChromaDB Synced
+                    <Database className="w-3 h-3" /> Synced & Indexed
                   </span>
                   <span>•</span>
                   <span>ID: #{faq.id}</span>

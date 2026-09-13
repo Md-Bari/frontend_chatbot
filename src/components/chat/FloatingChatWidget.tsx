@@ -628,13 +628,13 @@ export default function FloatingChatWidget({
 
                           <button
                             type="button"
-                            onClick={() => handleFillDemo('user', 'user123')}
+                            onClick={() => handleFillDemo('demo', 'demo123')}
                             className="text-left text-xs bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 p-2 rounded-xl border border-slate-200 transition-all"
                           >
                             <p className="font-bold text-slate-800 flex items-center gap-1">
                               <span> নাগরিক ইউজার</span>
                             </p>
-                            <p className="text-[10px] text-slate-500 font-mono">user / user123</p>
+                            <p className="text-[10px] text-slate-500 font-mono">demo / demo123</p>
                           </button>
                         </div>
                         <p className="text-[10px] text-slate-400 text-center pt-1">
@@ -799,7 +799,7 @@ export default function FloatingChatWidget({
                     </form>
 
                     <div className="mt-1.5 flex items-center justify-between text-[10px] text-gray-400 px-1">
-                      <span>LangChain Hybrid RAG • BDRIS নিয়মাবলী</span>
+                      <span> BDRIS নিয়মাবলী</span>
                       <span>Enter ↵ পাঠিয়ে দিন</span>
                     </div>
                   </div>
