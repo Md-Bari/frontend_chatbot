@@ -199,7 +199,7 @@ const CITIZEN_NOTICES = [
   },
   {
     id: 4,
-    tag: 'ফ্যামিলি ট্রি ও মোবাইল নম্বর',
+    tag: 'মোবাইল নম্বর ব্যবহারের সীমা',
     tagColor: 'bg-blue-700',
     text: ' সফটওয়্যারে একটি মোবাইল নম্বর দিয়ে পরিবারের সর্বোচ্চ ৫ জন সদস্যের নিবন্ধনের ব্যবস্থা রয়েছে।',
     prompt: 'একটি মোবাইল নম্বর দিয়ে সর্বোচ্চ কতজন পরিবারের সদস্যের নিবন্ধন করা যায়?',
@@ -331,10 +331,10 @@ export default function HomePage() {
               ম্যানুয়াল থেকে অনলাইন
             </button>
             <button
-              onClick={() => openChatWithPrompt('Family Tree পদ্ধতি কী এবং কেন ব্যবহার করা হচ্ছে?')}
+              onClick={() => openChatWithPrompt('জমজ সন্তানের জন্ম নিবন্ধন কীভাবে করা হবে?')}
               className="bg-emerald-800/60 hover:bg-emerald-700/80 px-2.5 py-1 rounded-full border border-emerald-700/50 transition-colors"
             >
-              Family Tree পদ্ধতি
+              জমজ সন্তানের নিবন্ধন
             </button>
           </div>
         </div>
