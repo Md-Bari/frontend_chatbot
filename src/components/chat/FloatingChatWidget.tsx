@@ -312,7 +312,7 @@ export default function FloatingChatWidget({
     } catch (err: any) {
       const errorMsg: ChatMessage = {
         sender: 'assistant',
-        content: `⚠️ উত্তরের অনুরোধ প্রক্রিয়া করার সময় ত্রুটি হয়েছে: ${err.message || 'সার্ভার সংযোগে সমস্যা'}. অনুগ্রহ করে কিছুক্ষণ পর পুনরায় চেষ্টা করুন।`,
+        content: ` উত্তরের অনুরোধ প্রক্রিয়া করার সময় ত্রুটি হয়েছে: ${err.message || 'সার্ভার সংযোগে সমস্যা'}. অনুগ্রহ করে কিছুক্ষণ পর পুনরায় চেষ্টা করুন।`,
         created_at: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, errorMsg]);
@@ -717,7 +717,6 @@ export default function FloatingChatWidget({
                   {messages.length <= 2 && (
                     <div className="px-4 py-2 border-t border-gray-100 bg-white/80">
                       <p className="text-[10px] font-bold text-gray-400 mb-1.5 uppercase tracking-wider flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-amber-500" />
                         প্রস্তাবিত জিজ্ঞাসা:
                       </p>
                       <div className="flex flex-wrap gap-1.5">
