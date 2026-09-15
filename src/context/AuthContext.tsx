@@ -1,8 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@/lib/types';
-import { authApi, clearAuthToken, getAuthToken, isTokenExpired, notifyTokenExpired, setAuthToken } from '@/lib/api';
+import { authApi, clearAuthToken, setAuthToken } from '@/lib/api';
 
 interface AuthContextType {
   user: User | null;
@@ -23,44 +23,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const handleTokenExpired = useCallback(() => {
-    clearAuthToken();
-    setUser(null);
-    setToken(null);
-    setIsLoading(false);
-  }, []);
-
-  // Listen for global auth:token-expired events
-  useEffect(() => {
-    window.addEventListener('auth:token-expired', handleTokenExpired);
-    return () => {
-      window.removeEventListener('auth:token-expired', handleTokenExpired);
-    };
-  }, [handleTokenExpired]);
-
-  // Periodic and on-focus check for token expiration
-  useEffect(() => {
-    const checkExpiration = () => {
-      const currentToken = typeof window !== 'undefined'
-        ? (localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token'))
-        : null;
-
-      if (currentToken && isTokenExpired(currentToken)) {
-        notifyTokenExpired('Periodic check detected expired token');
-      }
-    };
-
-    const interval = setInterval(checkExpiration, 10000);
-    window.addEventListener('focus', checkExpiration);
-    document.addEventListener('visibilitychange', checkExpiration);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('focus', checkExpiration);
-      document.removeEventListener('visibilitychange', checkExpiration);
-    };
-  }, []);
-
   // Initialize auth state
   useEffect(() => {
     async function initAuth() {
@@ -69,11 +31,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const storedUser = localStorage.getItem('auth_user');
 
       if (storedToken) {
-        if (isTokenExpired(storedToken)) {
-          handleTokenExpired();
-          return;
-        }
-
         setToken(storedToken);
         if (storedUser) {
           try {
@@ -87,14 +44,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(profile);
           localStorage.setItem('auth_user', JSON.stringify(profile));
         } catch {
-          // Token might be expired or invalid
-          handleTokenExpired();
+          // Token might be expired
+          clearAuthToken();
+          setUser(null);
+          setToken(null);
         }
       }
       setIsLoading(false);
     }
     initAuth();
-  }, [handleTokenExpired]);
+  }, []);
 
   const login = async (username: string, password?: string): Promise<User> => {
     setIsLoading(true);
