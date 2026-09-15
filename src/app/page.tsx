@@ -271,6 +271,28 @@ export default function HomePage() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-700/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-green-500/10 rounded-full blur-2xl translate-y-1/3 -translate-x-1/3 pointer-events-none"></div>
 
+        {/* Left Side Background Portrait with Low Transparency */}
+        <div 
+          className="absolute inset-y-0 left-4 sm:left-12 md:left-20 lg:left-28 w-72 sm:w-88 md:w-[440px] lg:w-[480px] pointer-events-none select-none z-0 opacity-20 sm:opacity-25 mix-blend-screen bg-no-repeat bg-left-bottom bg-contain"
+          style={{
+            backgroundImage: "url('/leader_bg.jpg')",
+            maskImage: "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
+            WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)"
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Right Side Background Portrait with Low Transparency */}
+        <div 
+          className="absolute inset-y-0 right-4 sm:right-12 md:right-20 lg:right-28 w-72 sm:w-88 md:w-[440px] lg:w-[480px] pointer-events-none select-none z-0 opacity-20 sm:opacity-25 mix-blend-screen bg-no-repeat bg-right-bottom bg-contain"
+          style={{
+            backgroundImage: "url('/leader_right.jpg')",
+            maskImage: "linear-gradient(to left, rgba(0,0,0,0.2) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
+            WebkitMaskImage: "linear-gradient(to left, rgba(0,0,0,0.2) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)"
+          }}
+          aria-hidden="true"
+        />
+
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-emerald-800/80 border border-emerald-600/40 px-3 py-1 rounded-full text-xs font-semibold text-emerald-200 mb-4 backdrop-blur-xs shadow-xs">

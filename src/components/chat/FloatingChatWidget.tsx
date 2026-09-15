@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { authApi, chatApi, clearAuthToken } from '@/lib/api';
+import { authApi, chatApi, clearAuthToken, notifyTokenExpired } from '@/lib/api';
 import { ChatMessage, ChatTurn, User } from '@/lib/types';
 import {
   Send,
@@ -104,6 +104,35 @@ export default function FloatingChatWidget({
 
   const onPromptConsumedRef = useRef(onPromptConsumed);
   onPromptConsumedRef.current = onPromptConsumed;
+
+  // Auto-refresh chat when access token expires
+  const handleTokenExpired = useCallback(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setSpeakingIndex(null);
+    setChatUser(null);
+    setLoginPassword('');
+    setInputMessage('');
+    setIsSending(false);
+    setPendingPrompt(null);
+    setMessages([
+      {
+        sender: 'assistant',
+        content: 'আসসালামু আলাইকুম! আপনার সেশনের মেয়াদ শেষ হওয়ায় চ্যাট সেশনটি স্বয়ংক্রিয়ভাবে রিফ্রেশ করা হয়েছে। জন্ম ও মৃত্যু নিবন্ধন সংক্রান্ত তথ্য জানতে অনুগ্রহ করে পুনরায় লগইন করুন।',
+        created_at: new Date().toISOString(),
+      },
+    ]);
+    setAuthError('আপনার অ্যাক্সেস টোকেনের মেয়াদ শেষ হয়েছে। চ্যাটটি স্বয়ংক্রিয়ভাবে রিফ্রেশ করা হয়েছে। অনুগ্রহ করে পুনরায় লগইন করুন।');
+  }, []);
+
+  // Listen for global auth:token-expired events
+  useEffect(() => {
+    window.addEventListener('auth:token-expired', handleTokenExpired);
+    return () => {
+      window.removeEventListener('auth:token-expired', handleTokenExpired);
+    };
+  }, [handleTokenExpired]);
 
   // Sync propIsOpen if provided externally
   useEffect(() => {
@@ -310,9 +339,25 @@ export default function FloatingChatWidget({
 
       setMessages((prev) => [...prev, botMsg]);
     } catch (err: any) {
+      const errMsg = err?.message || 'সার্ভার সংযোগে সমস্যা';
+      const lowerMsg = errMsg.toLowerCase();
+      const isAuthErr =
+        lowerMsg.includes('401') ||
+        lowerMsg.includes('unauthorized') ||
+        lowerMsg.includes('token') ||
+        lowerMsg.includes('credential') ||
+        lowerMsg.includes('expire');
+
+      if (isAuthErr) {
+        clearAuthToken();
+        notifyTokenExpired(errMsg);
+        handleTokenExpired();
+        return;
+      }
+
       const errorMsg: ChatMessage = {
         sender: 'assistant',
-        content: ` উত্তরের অনুরোধ প্রক্রিয়া করার সময় ত্রুটি হয়েছে: ${err.message || 'সার্ভার সংযোগে সমস্যা'}. অনুগ্রহ করে কিছুক্ষণ পর পুনরায় চেষ্টা করুন।`,
+        content: ` উত্তরের অনুরোধ প্রক্রিয়া করার সময় ত্রুটি হয়েছে: ${errMsg}. অনুগ্রহ করে কিছুক্ষণ পর পুনরায় চেষ্টা করুন।`,
         created_at: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, errorMsg]);
@@ -453,10 +498,29 @@ export default function FloatingChatWidget({
             </div>
 
             <div className="flex items-center space-x-1 text-white/80">
+              {isLoggedIn && (
+                <>
+                  <button
+                    onClick={handleRenewChat}
+                    title="নতুন চ্যাট শুরু করুন (রিফ্রেশ)"
+                    className="p-1.5 hover:bg-white/20 hover:text-white rounded-lg transition-colors cursor-pointer"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleEndSession}
+                    title="সেশন সমাপ্ত করুন / লগআউট"
+                    className="p-1.5 hover:bg-white/20 hover:text-red-200 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </>
+              )}
+
               <button
                 onClick={toggleOpen}
                 title="মিনিমাইজ করুন"
-                className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-white/20 hover:text-white rounded-lg transition-colors cursor-pointer"
               >
                 <Minus className="w-4 h-4" />
               </button>
@@ -464,7 +528,7 @@ export default function FloatingChatWidget({
               <button
                 onClick={toggleOpen}
                 title="বন্ধ করুন"
-                className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-white/20 hover:text-white rounded-lg transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>

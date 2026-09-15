@@ -20,9 +20,54 @@ export const API_BASE_URL = typeof window !== 'undefined'
   ? '' 
   : (process.env.NEXT_PUBLIC_API_URL || 'https://lifter-skipper-cheer.ngrok-free.dev');
 
+export function isTokenExpired(token: string | null): boolean {
+  if (!token) return true;
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      // Not a standard JWT; assume valid until API returns 401
+      return false;
+    }
+    const payloadBase64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(payloadBase64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    const payload = JSON.parse(jsonPayload);
+    if (payload && typeof payload.exp === 'number') {
+      // Check if expired (with 3-second skew buffer)
+      return payload.exp * 1000 <= Date.now() + 3000;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+export function notifyTokenExpired(reason?: string) {
+  clearAuthToken();
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent('auth:token-expired', {
+        detail: {
+          reason: reason || 'expired',
+          timestamp: Date.now(),
+        },
+      })
+    );
+  }
+}
+
 export function getAuthToken(): string | null {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+  const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+  if (token && isTokenExpired(token)) {
+    notifyTokenExpired('Token expired in storage');
+    return null;
+  }
+  return token;
 }
 
 export function setAuthToken(token: string, persist: boolean = true) {
@@ -75,6 +120,16 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       const text = await res.text();
       if (text) errorMessage = text;
     }
+
+    const lowerMsg = (typeof errorMessage === 'string' ? errorMessage : '').toLowerCase();
+    const isUnauthorized =
+      res.status === 401 ||
+      (res.status === 403 && (lowerMsg.includes('token') || lowerMsg.includes('credential') || lowerMsg.includes('unauthorized') || lowerMsg.includes('expire')));
+
+    if (isUnauthorized) {
+      notifyTokenExpired(errorMessage);
+    }
+
     throw new Error(errorMessage);
   }
 
